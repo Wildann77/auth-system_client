@@ -11,6 +11,7 @@ import DashboardPage from '@/features/user/pages/DashboardPage';
 import SettingsPage from '@/features/settings/pages/SettingsPage';
 import Setup2FAPage from '@/features/settings/pages/Setup2FAPage';
 import PremiumPage from '@/features/payment/pages/PremiumPage';
+import PaymentStatusPage from '@/features/payment/pages/PaymentStatusPage';
 import ContentPage from '@/features/content/pages/ContentPage';
 import AdminDashboardPage from '@/features/admin/pages/AdminDashboardPage';
 import NotFoundPage from './NotFoundPage';
@@ -59,6 +60,14 @@ const router = createBrowserRouter([
   {
     path: '/premium',
     element: <ProtectedRoute><AppLayout><PremiumPage /></AppLayout></ProtectedRoute>,
+  },
+  {
+    path: '/payment/success',
+    element: <ProtectedRoute><AppLayout><PaymentStatusPage /></AppLayout></ProtectedRoute>,
+  },
+  {
+    path: '/payment/cancel',
+    element: <ProtectedRoute><AppLayout><PaymentStatusPage /></AppLayout></ProtectedRoute>,
   },
   {
     path: '/content',

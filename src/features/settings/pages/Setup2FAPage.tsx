@@ -22,6 +22,7 @@ export default function Setup2FAPage() {
   const disable2FA = useDisable2FA();
 
   const [setupOpen, setSetupOpen] = useState(false);
+  const [step, setStep] = useState<'initial' | 'qrcode' | 'verify' | 'confirm' | 'disabled'>('initial');
   const [qrCode, setQrCode] = useState<string>('');
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [password, setPassword] = useState('');

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { User, Lock, Shield, Save, Eye, EyeOff, Loader2 } from 'lucide-react';
@@ -275,9 +276,9 @@ export default function SettingsPage() {
               </div>
 
               <Button asChild variant={user.twoFactorEnabled ? 'destructive' : 'default'}>
-                <a href="/settings/2fa">
+                <Link to="/settings/2fa">
                   {user.twoFactorEnabled ? 'Kelola 2FA' : 'Aktifkan 2FA'}
-                </a>
+                </Link>
               </Button>
             </CardContent>
           </Card>

@@ -48,9 +48,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/settings', label: 'Pengaturan', icon: Settings },
-    { path: '/premium', label: 'Premium', icon: Crown },
-    ...(user?.isPremium ? [{ path: '/content', label: 'Konten Premium', icon: Crown }] : []),
-    ...(user?.role === 'ADMIN' ? [{ path: '/admin', label: 'Admin', icon: Shield }] : []),
+    ...(user?.role !== 'ADMIN' ? [{ path: '/premium', label: 'Premium', icon: Crown }] : []),
+    ...(user?.role !== 'ADMIN' && user?.isPremium ? [{ path: '/content', label: 'Konten Premium', icon: Crown }] : []),
+    ...(user?.role === 'ADMIN' ? [{ path: '/admin', label: 'Admin Panel', icon: Shield }] : []),
   ];
 
   const handleLogout = () => {

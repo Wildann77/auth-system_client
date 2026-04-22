@@ -30,9 +30,9 @@ export default function AdminDashboardPage() {
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [roleFilter, setRoleFilter] = useState<'USER' | 'ADMIN' | ''>('');
-  const [verifiedFilter, setVerifiedFilter] = useState<'true' | 'false' | ''>('');
-  const [providerFilter, setProviderFilter] = useState<'LOCAL' | 'GOOGLE' | ''>('');
+  const [roleFilter, setRoleFilter] = useState<string>('all');
+  const [verifiedFilter, setVerifiedFilter] = useState<string>('all');
+  const [providerFilter, setProviderFilter] = useState<string>('all');
 
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['admin-stats'],
@@ -44,9 +44,9 @@ export default function AdminDashboardPage() {
     queryFn: () => adminApi.getUsers({
       page,
       limit,
-      role: roleFilter || undefined,
-      isEmailVerified: verifiedFilter || undefined,
-      provider: providerFilter || undefined,
+      role: roleFilter === 'all' ? undefined : roleFilter as any,
+      isEmailVerified: verifiedFilter === 'all' ? undefined : verifiedFilter as any,
+      provider: providerFilter === 'all' ? undefined : providerFilter as any,
     }),
   });
 
@@ -163,12 +163,12 @@ export default function AdminDashboardPage() {
           <div className="flex flex-wrap gap-4">
             <div className="flex items-center gap-2">
               <Label>Role:</Label>
-              <Select value={roleFilter} onValueChange={(v) => setRoleFilter(v as 'USER' | 'ADMIN' | '')}>
+              <Select value={roleFilter} onValueChange={setRoleFilter}>
                 <SelectTrigger className="w-[120px]">
                   <SelectValue placeholder="Semua" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Semua</SelectItem>
+                  <SelectItem value="all">Semua</SelectItem>
                   <SelectItem value="USER">User</SelectItem>
                   <SelectItem value="ADMIN">Admin</SelectItem>
                 </SelectContent>
@@ -176,12 +176,12 @@ export default function AdminDashboardPage() {
             </div>
             <div className="flex items-center gap-2">
               <Label>Status:</Label>
-              <Select value={verifiedFilter} onValueChange={(v) => setVerifiedFilter(v as 'true' | 'false' | '')}>
+              <Select value={verifiedFilter} onValueChange={setVerifiedFilter}>
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Semua" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Semua</SelectItem>
+                  <SelectItem value="all">Semua</SelectItem>
                   <SelectItem value="true">Terverifikasi</SelectItem>
                   <SelectItem value="false">Belum</SelectItem>
                 </SelectContent>
@@ -189,12 +189,12 @@ export default function AdminDashboardPage() {
             </div>
             <div className="flex items-center gap-2">
               <Label>Provider:</Label>
-              <Select value={providerFilter} onValueChange={(v) => setProviderFilter(v as 'LOCAL' | 'GOOGLE' | '')}>
+              <Select value={providerFilter} onValueChange={setProviderFilter}>
                 <SelectTrigger className="w-[120px]">
                   <SelectValue placeholder="Semua" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Semua</SelectItem>
+                  <SelectItem value="all">Semua</SelectItem>
                   <SelectItem value="LOCAL">Local</SelectItem>
                   <SelectItem value="GOOGLE">Google</SelectItem>
                 </SelectContent>

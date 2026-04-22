@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Crown, CreditCard, CheckCircle, Loader2 } from 'lucide-react';
+import { Crown, CreditCard, CheckCircle, Loader2, Shield } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { paymentApi } from '@/features/auth/api/auth.api';
 import { toast } from 'sonner';
+import { PAYMENT_CONSTANTS } from '../constants';
 
-const PREMIUM_PRICE = 99000; // Rp 99,000
+const PREMIUM_PRICE = PAYMENT_CONSTANTS.PREMIUM_UPGRADE_PRICE; // Rp 99,000
 
 const FEATURES = [
   'Akses konten eksklusif premium',
@@ -111,81 +112,95 @@ export default function PremiumPage() {
           </CardContent>
         </Card>
 
-        {/* Pricing Card */}
-        <Card className="backdrop-blur-sm bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Crown className="h-5 w-5 text-yellow-500" />
-              Premium Plan
-            </CardTitle>
-            <CardDescription>
-              Satu pembayaran untuk akses seumur hidup
+        {/* Pricing Card / Admin Message */}
+        {user.role === 'ADMIN' ? (
+          <Card className="backdrop-blur-sm bg-primary/5 border-primary/20 flex flex-col justify-center items-center p-8 text-center space-y-4">
+            <Shield className="h-16 w-16 text-primary opacity-50" />
+            <CardTitle className="text-xl">Akun Administrator</CardTitle>
+            <CardDescription className="text-base">
+              Sebagai Administrator, tugas Anda adalah mengelola sistem dan konten. 
+              Akun Admin tidak diperbolehkan melakukan transaksi pembelian premium.
             </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="text-center">
-              <div className="text-5xl font-bold">
-                Rp {PREMIUM_PRICE.toLocaleString('id-ID')}
-              </div>
-              <p className="text-muted-foreground mt-2">Sekali bayar</p>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Pilih Metode Pembayaran</label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setProvider('midtrans')}
-                  className={`p-3 rounded-lg border text-center transition-colors ${
-                    provider === 'midtrans'
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                >
-                  <CreditCard className="h-6 w-6 mx-auto mb-1" />
-                  <span className="text-sm">Midtrans</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setProvider('stripe')}
-                  className={`p-3 rounded-lg border text-center transition-colors ${
-                    provider === 'stripe'
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                >
-                  <CreditCard className="h-6 w-6 mx-auto mb-1" />
-                  <span className="text-sm">Stripe</span>
-                </button>
-              </div>
-            </div>
-
-            <Button
-              className="w-full"
-              size="lg"
-              onClick={handleUpgrade}
-              disabled={isLoading || user.isPremium}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Memproses...
-                </>
-              ) : user.isPremium ? (
-                'Sudah Premium'
-              ) : (
-                <>
-                  <Crown className="h-4 w-4 mr-2" />
-                  Upgrade Sekarang
-                </>
-              )}
+            <Button variant="outline" onClick={() => navigate('/admin')}>
+              Buka Admin Dashboard
             </Button>
+          </Card>
+        ) : (
+          <Card className="backdrop-blur-sm bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Crown className="h-5 w-5 text-yellow-500" />
+                Premium Plan
+              </CardTitle>
+              <CardDescription>
+                Satu pembayaran untuk akses seumur hidup
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="text-center">
+                <div className="text-5xl font-bold">
+                  Rp {PREMIUM_PRICE.toLocaleString('id-ID')}
+                </div>
+                <p className="text-muted-foreground mt-2">Sekali bayar</p>
+              </div>
 
-            <p className="text-xs text-muted-foreground text-center">
-              Pembayaran aman melalui {provider === 'midtrans' ? 'Midtrans' : 'Stripe'}
-            </p>
-          </CardContent>
-        </Card>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Pilih Metode Pembayaran</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setProvider('midtrans')}
+                    className={`p-3 rounded-lg border text-center transition-colors ${
+                      provider === 'midtrans'
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                  >
+                    <CreditCard className="h-6 w-6 mx-auto mb-1" />
+                    <span className="text-sm">Midtrans</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setProvider('stripe')}
+                    className={`p-3 rounded-lg border text-center transition-colors ${
+                      provider === 'stripe'
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                  >
+                    <CreditCard className="h-6 w-6 mx-auto mb-1" />
+                    <span className="text-sm">Stripe</span>
+                  </button>
+                </div>
+              </div>
+
+              <Button
+                className="w-full"
+                size="lg"
+                onClick={handleUpgrade}
+                disabled={isLoading || user.isPremium}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Memproses...
+                  </>
+                ) : user.isPremium ? (
+                  'Sudah Premium'
+                ) : (
+                  <>
+                    <Crown className="h-4 w-4 mr-2" />
+                    Upgrade Sekarang
+                  </>
+                )}
+              </Button>
+
+              <p className="text-xs text-muted-foreground text-center">
+                Pembayaran aman melalui {provider === 'midtrans' ? 'Midtrans' : 'Stripe'}
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* FAQ Section */}

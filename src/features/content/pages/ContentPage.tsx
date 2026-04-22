@@ -42,7 +42,7 @@ export default function ContentPage() {
         </div>
       </div>
 
-      {contentData?.data && contentData.data.length === 0 ? (
+      {contentData?.data && Array.isArray(contentData.data) && contentData.data.length === 0 ? (
         <Card className="max-w-2xl mx-auto backdrop-blur-sm bg-white/5 border-white/10">
           <CardContent className="flex flex-col items-center justify-center py-12 space-y-4">
             <Crown className="h-12 w-12 text-muted-foreground" />
@@ -54,7 +54,7 @@ export default function ContentPage() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {contentData?.data?.map((content) => (
+          {Array.isArray(contentData?.data) && contentData.data.map((content) => (
             <Card key={content.id} className="backdrop-blur-sm bg-white/5 border-white/10 overflow-hidden">
               <CardHeader>
                 <div className="flex items-start justify-between">

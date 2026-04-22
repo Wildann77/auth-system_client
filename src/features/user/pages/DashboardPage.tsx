@@ -67,32 +67,34 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Premium</CardTitle>
-            <Crown className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              {user.isPremium ? (
-                <>
-                  <Crown className="h-5 w-5 text-yellow-500" />
-                  <span className="text-sm">Premium Aktif</span>
-                </>
-              ) : (
-                <>
-                  <CreditCard className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-sm">Free Plan</span>
-                </>
+        {user.role !== 'ADMIN' && (
+          <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Premium</CardTitle>
+              <Crown className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                {user.isPremium ? (
+                  <>
+                    <Crown className="h-5 w-5 text-yellow-500" />
+                    <span className="text-sm">Premium Aktif</span>
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm">Free Plan</span>
+                  </>
+                )}
+              </div>
+              {user.premiumUntil && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Berakhir: {formatDateTime(user.premiumUntil)}
+                </p>
               )}
-            </div>
-            {user.premiumUntil && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Berakhir: {formatDateTime(user.premiumUntil)}
-              </p>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="backdrop-blur-sm bg-white/5 border-white/10">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -138,7 +140,7 @@ export default function DashboardPage() {
           </Card>
         </Link>
 
-        {!user.isPremium && (
+        {user.role !== 'ADMIN' && !user.isPremium && (
           <Link to="/premium">
             <Card className="backdrop-blur-sm bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/20 hover:from-yellow-500/20 to-orange-500/20 transition-colors cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between">
@@ -159,7 +161,7 @@ export default function DashboardPage() {
           </Link>
         )}
 
-        {user.isPremium && (
+        {user.role !== 'ADMIN' && user.isPremium && (
           <Link to="/content">
             <Card className="backdrop-blur-sm bg-white/5 border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between">

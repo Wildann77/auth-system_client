@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { authApi } from '../../api/auth.api';
 import { useAuthStore } from '../../store/auth.store';
 import type { LoginFormData, RegisterFormData, ForgotPasswordFormData } from '../../types/auth.types';
-import type { LoginRequest, RegisterRequest, ForgotPasswordRequest, ApiResponse } from '@/shared/types';
+import type { LoginRequest, RegisterRequest, ForgotPasswordRequest, ApiResponse, User } from '@/shared/types';
 
 export function useLogin() {
   const navigate = useNavigate();
@@ -20,12 +20,9 @@ export function useLogin() {
       const response = await authApi.login(request);
       return response;
     },
-    onSuccess: (response: ApiResponse<{ user: { id: string; email: string; firstName: string | null; lastName: string | null; role: 'USER' | 'ADMIN' }; accessToken: string; requires2FA?: boolean }>) => {
+    onSuccess: (response: ApiResponse<{ user: User; accessToken: string; requires2FA?: boolean }>) => {
       if (response.data?.user && response.data?.accessToken) {
-        setAuth(
-          { ...response.data.user, isEmailVerified: true, twoFactorEnabled: false, isPremium: false, provider: 'LOCAL' as const, premiumUntil: null, lastLoginAt: null, createdAt: '', updatedAt: '' },
-          response.data.accessToken
-        );
+        setAuth(response.data.user, response.data.accessToken);
         toast.success('Login berhasil!');
         navigate('/dashboard');
       }

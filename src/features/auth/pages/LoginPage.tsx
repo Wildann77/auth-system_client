@@ -68,17 +68,14 @@ export default function LoginPage() {
     if (!pendingCredentials) return;
 
     try {
-      const result = await login.mutateAsync({
+      await login.mutateAsync({
         email: pendingCredentials.email,
         password: pendingCredentials.password,
         otp,
       });
-
-      if (!result.data?.requires2FA) {
-        navigate('/dashboard');
-      }
-    } catch {
-      toast.error('Kode OTP tidak valid');
+      // Navigation is handled in useLogin.ts onSuccess
+    } catch (error) {
+      // Error toast is handled by useLogin.ts onError
     }
   };
 
@@ -249,6 +246,21 @@ function OTPInput({
     }
   };
 
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const data = e.clipboardData.getData('text').slice(0, length).replace(/\D/g, '');
+    const newOtp = [...otp];
+    
+    data.split('').forEach((char, i) => {
+      newOtp[i] = char;
+    });
+    setOtp(newOtp);
+
+    if (data.length === length) {
+      onComplete(data);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
       const container = e.currentTarget.closest('.flex');
@@ -269,6 +281,7 @@ function OTPInput({
           value={digit}
           onChange={(e) => handleChange(e.target, index)}
           onKeyDown={(e) => handleKeyDown(e, index)}
+          onPaste={handlePaste}
           className="w-12 h-14 text-center text-xl font-bold border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
           disabled={disabled}
         />

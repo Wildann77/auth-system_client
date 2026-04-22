@@ -22,7 +22,7 @@ export default function Setup2FAPage() {
   const confirm2FA = useConfirm2FA();
   const disable2FA = useDisable2FA();
 
-  const [step, setStep] = useState<'initial' | 'qrcode' | 'confirm' | 'disabled'>('initial');
+  const [step, setStep] = useState<'initial' | 'qrcode' | 'verify' | 'confirm' | 'disabled'>('initial');
   const [qrCode, setQrCode] = useState<string>('');
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -55,8 +55,13 @@ export default function Setup2FAPage() {
   };
 
   const handleConfirm2FA = async (data: Confirm2FAFormData) => {
-    await confirm2FA.mutateAsync(data.code);
-    setStep('confirm');
+    try {
+      await confirm2FA.mutateAsync(data.code);
+      setStep('confirm');
+      setQrCode(''); // Clear QR code to close verification modal
+    } catch {
+      // Error handled in mutation
+    }
   };
 
   const handleDisable2FA = async (data: Disable2FAFormData) => {
@@ -177,7 +182,7 @@ export default function Setup2FAPage() {
       </Dialog>
 
       {/* QR Code Modal */}
-      <Dialog open={step === 'qrcode'} onOpenChange={() => {}}>
+      <Dialog open={step === 'qrcode'} onOpenChange={(open) => !open && setStep('initial')}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Pindai QR Code</DialogTitle>
@@ -185,61 +190,96 @@ export default function Setup2FAPage() {
               Pindai QR code berikut dengan aplikasi authenticator Anda
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col items-center space-y-4">
-            <div className="p-4 bg-white rounded-lg">
+          <div className="flex flex-col items-center space-y-6">
+            <div className="p-4 bg-white rounded-lg shadow-inner">
               <QRCodeSVG value={qrCode} size={200} />
             </div>
-            <div className="w-full">
-              <div className="flex items-center justify-between mb-2">
-                <Label>Backup Codes</Label>
-                <Button variant="ghost" size="sm" onClick={copyBackupCodes}>
-                  <Copy className="h-4 w-4 mr-1" />
-                  Salin
+            
+            <div className="w-full space-y-4">
+              <div className="p-3 bg-muted rounded-lg border border-dashed">
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-xs uppercase tracking-wider text-muted-foreground">Backup Codes</Label>
+                  <Button variant="ghost" size="sm" className="h-7 px-2" onClick={copyBackupCodes}>
+                    <Copy className="h-3 w-3 mr-1" />
+                    Salin
+                  </Button>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {backupCodes.map((code, i) => (
+                    <code key={i} className="text-[10px] font-mono bg-background/50 px-2 py-1 rounded text-center">
+                      {code}
+                    </code>
+                  ))}
+                </div>
+                <p className="text-[10px] text-yellow-600 mt-2 flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3 shrink-0" />
+                  Simpan backup codes di tempat yang aman!
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Button className="w-full" onClick={() => setStep('verify')}>
+                  Saya sudah memindai QR code
+                </Button>
+                <Button variant="ghost" className="w-full" onClick={() => {
+                  setStep('initial');
+                  setQrCode('');
+                }}>
+                  Batal
                 </Button>
               </div>
-              <div className="grid grid-cols-2 gap-2 bg-muted p-3 rounded-lg">
-                {backupCodes.map((code, i) => (
-                  <code key={i} className="text-xs font-mono bg-background px-2 py-1 rounded">
-                    {code}
-                  </code>
-                ))}
-              </div>
-              <p className="text-xs text-yellow-600 mt-2 flex items-center gap-1">
-                <AlertTriangle className="h-3 w-3" />
-                Simpan backup codes di tempat yang aman!
-              </p>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Confirm 2FA Modal */}
-      <Dialog open={step === 'confirm' || qrCode !== ''} onOpenChange={() => {}}>
+      <Dialog open={step === 'verify'} onOpenChange={(open) => !open && setStep('qrcode')}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Verifikasi Kode</DialogTitle>
             <DialogDescription>
-              Masukkan kode 6 digit dari aplikasi authenticator
+              Masukkan kode 6 digit dari aplikasi authenticator untuk mengaktifkan 2FA
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={confirmForm.handleSubmit(handleConfirm2FA)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="confirm-code">Kode Verifikasi</Label>
-              <Input
-                id="confirm-code"
-                type="text"
-                maxLength={6}
-                placeholder="000000"
-                className="text-center text-2xl tracking-widest"
-                {...confirmForm.register('code')}
-              />
-              {confirmForm.formState.errors.code && (
-                <p className="text-sm text-red-500">{confirmForm.formState.errors.code.message}</p>
-              )}
+          <form onSubmit={confirmForm.handleSubmit(handleConfirm2FA)} className="space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="confirm-code" className="text-center block">Kode Verifikasi</Label>
+                <Input
+                  id="confirm-code"
+                  type="text"
+                  inputMode="numeric"
+                  autoFocus
+                  maxLength={6}
+                  placeholder="000000"
+                  className="text-center text-3xl h-16 tracking-[0.5em] font-mono"
+                  {...confirmForm.register('code')}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '');
+                    confirmForm.setValue('code', val);
+                    if (val.length === 6) {
+                      confirmForm.handleSubmit(handleConfirm2FA)();
+                    }
+                  }}
+                />
+                {confirmForm.formState.errors.code && (
+                  <p className="text-sm text-red-500 text-center">{confirmForm.formState.errors.code.message}</p>
+                )}
+              </div>
+              <div className="bg-blue-500/10 p-3 rounded-lg flex items-start gap-3">
+                <Shield className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
+                <p className="text-xs text-blue-600 leading-relaxed">
+                  Pastikan waktu di perangkat Anda sudah sinkron agar kode verifikasi valid.
+                </p>
+              </div>
             </div>
-            <DialogFooter>
-              <Button type="submit" disabled={confirm2FA.isPending}>
-                {confirm2FA.isPending ? 'Memuat...' : 'Verifikasi'}
+            <DialogFooter className="flex-col sm:flex-col gap-2">
+              <Button type="submit" className="w-full" disabled={confirm2FA.isPending}>
+                {confirm2FA.isPending ? 'Memverifikasi...' : 'Aktifkan Sekarang'}
+              </Button>
+              <Button type="button" variant="ghost" className="w-full" onClick={() => setStep('qrcode')}>
+                Kembali ke QR Code
               </Button>
             </DialogFooter>
           </form>

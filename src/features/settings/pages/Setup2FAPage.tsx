@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Shield, CheckCircle, Copy, Eye, EyeOff, AlertTriangle } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react';
+import { Shield, CheckCircle, Copy, Eye, EyeOff, AlertTriangle, Loader2 } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
@@ -174,7 +173,12 @@ export default function Setup2FAPage() {
                 Batal
               </Button>
               <Button onClick={handleEnable2FA} disabled={enable2FA.isPending || !password}>
-                {enable2FA.isPending ? 'Memuat...' : 'Lanjutkan'}
+                {enable2FA.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Memproses...
+                  </>
+                ) : 'Lanjutkan'}
               </Button>
             </DialogFooter>
           </div>
@@ -191,8 +195,14 @@ export default function Setup2FAPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center space-y-6">
-            <div className="p-4 bg-white rounded-lg shadow-inner">
-              <QRCodeSVG value={qrCode} size={200} />
+            <div className="p-4 bg-white rounded-lg shadow-md">
+              {qrCode ? (
+                <img src={qrCode} alt="QR Code 2FA" className="w-[200px] h-[200px]" />
+              ) : (
+                <div className="w-[200px] h-[200px] flex items-center justify-center bg-muted animate-pulse">
+                  Memuat QR Code...
+                </div>
+              )}
             </div>
             
             <div className="w-full space-y-4">

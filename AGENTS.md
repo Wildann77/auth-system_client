@@ -73,11 +73,11 @@ VITE_API_URL=http://localhost:3000/api/v1
 Configured in `.env`
 
 ### Auth Flow
-1. **Instant App Load**: App starts immediately using persisted authentication state from localStorage (Zustand persist middleware)
-2. **Background Verification**: Token validity is verified asynchronously without blocking UI
-3. **Tokens stored in Zustand store (`useAuthStore`)** - always store access token before authenticated API calls
-4. **Access token passed via Authorization header**
-5. **Automatic token refresh on 401 response**
+1. **Hydration First**: App starts with `_hasHydrated: false`.
+2. **Instant App Load**: Once hydrated from `localStorage` (Zustand persist), `_hasHydrated` becomes `true`.
+3. **ProtectedRoute Guard**: Routes are blocked by `!_hasHydrated` and show Skeletons instead of redirecting.
+4. **Background Verification**: `initializeAuth()` is called once on mount (guarded against Strict Mode) to verify tokens asynchronously.
+5. **Reactive Redirection**: Axios interceptor calls `clearAuth()` on 401, which triggers `ProtectedRoute` to redirect to `/login` via React Router (no hard refresh).
 6. **Refresh token uses HTTP-only cookie**
 7. **Failed refresh redirects to `/login`**
 8. **2FA login**: Handle 400 errors with "2FA code required" message
@@ -120,6 +120,7 @@ GET  /content/exclusive
 Payment Constants:
 Price: 99.000 IDR (PREMIUM_UPGRADE_PRICE)
 Currency: IDR
+```
 
 ## Types
 
@@ -160,10 +161,10 @@ Flat config (`eslint.config.js`). No type-aware rules.
 
 ## Important Patterns
 
-1. **Auth Store Injection**: Store is exposed to window for axios interceptor access (`window.__authStore`)
-2. **Persist Middleware**: Zustand persist middleware handles authentication state restoration from localStorage on app start
-3. **Instant Auth UX**: App renders immediately with persisted state; no loading screens for returning users
-4. **Background Verification**: Token validation occurs asynchronously without blocking UI
+1. **Hydration Guard**: Use `_hasHydrated` in all protected/guest routes to prevent premature redirects during app boot.
+2. **Strict Mode Protection**: `initializeAuth` is guarded in both the store and `AppInitializer` to prevent token rotation conflicts in development.
+3. **Reactive Auth**: Avoid `window.location.href` for auth redirects; let `ProtectedRoute` react to state changes in the store.
+4. **Persist Middleware**: Zustand persist middleware handles authentication state restoration from localStorage on app start.
 5. **Component Export**: Use `react-refresh/only-export-components` for HMR
 6. **Token Ordering**: Always store access tokens in Zustand store before making authenticated API calls, as axios interceptors rely on store state
 7. **2FA Error Handling**: Catch 400 errors with "2FA code required" message in login flow to trigger OTP input UI
@@ -175,11 +176,11 @@ Flat config (`eslint.config.js`). No type-aware rules.
 
 Untuk AI Agent yang bekerja di repositori ini, harap perhatikan aturan berikut:
 
-1.  **Instant Auth UX**: App mulai langsung dengan state yang dipersist; tidak ada layar loading untuk user yang kembali.
-2.  **Persist Middleware**: Zustand persist middleware menangani restorasi state auth dari localStorage saat app start.
-3.  **Background Verification**: Validasi token terjadi asynchronous tanpa memblokir UI.
+1.  **Hydration Guard**: Gunakan `_hasHydrated` di semua route untuk menahan render/redirect sampai state dari localStorage siap.
+2.  **Concurrency Guard**: `initializeAuth` dilindungi agar tidak dieksekusi ganda (mencegah bug pada Refresh Token Rotation).
+3.  **No Hard Redirects**: Jangan gunakan `window.location.href` di interceptor; biarkan `ProtectedRoute` yang menangani navigasi.
 4.  **Pola Auth Store**: Gunakan `window.__authStore` jika ingin mengakses state auth di luar komponen React (seperti di Axios interceptor).
-5.  **Penanganan Error API**: Selalu periksa format `ApiResponse<T>`. Backend melempar error dalam format JSON, bukan hanya status code.
+5.  **Background Verification**: Validasi token terjadi asynchronous tanpa memblokir UI.
 6.  **Urutan Token**: Saat mendapatkan token baru (dari refresh atau OAuth), simpan ke store **sebelum** melakukan pemanggilan API berikutnya yang membutuhkan otentikasi.
 7.  **Skema Validasi**: Jaga konsistensi antara skema Zod di frontend (`features/auth/types/auth.types.ts`) dan backend. Jika ada perubahan aturan validasi di satu sisi, wajib update di sisi lainnya.
 8.  **Multi-step Auth**: Jangan asumsikan login selalu sukses dalam satu langkah. Selalu tangani kondisi `requires2FA` atau `emailNotVerified`.

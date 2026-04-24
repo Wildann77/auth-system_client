@@ -39,7 +39,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role'>;
+  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'isPremium' | 'lastLoginAt' | 'twoFactorEnabled'>;
   accessToken: string;
   requires2FA?: boolean;
 }

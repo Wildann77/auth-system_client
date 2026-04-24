@@ -1,35 +1,10 @@
-import { useEffect, useRef } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from 'next-themes';
 import { TooltipProvider } from '@/shared/components/ui/tooltip';
 import { AppRoutes } from '@/shared/routes';
-import { useAuthStore } from '@/features/auth/store/auth.store';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
-function AppInitializer({ children }: { children: React.ReactNode }) {
-  const initializeAuth = useAuthStore((state) => state.initializeAuth);
-  const initialized = useRef(false);
-
-  useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
-    
-    // Perform background auth verification without blocking UI
-    initializeAuth();
-  }, [initializeAuth]);
-
-  return <>{children}</>;
-}
-
+import { AppInitializer } from '@/shared/components/layout/AppInitializer';
+import { queryClient } from '@/shared/api/query-client';
 
 function App() {
   return (

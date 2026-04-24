@@ -15,28 +15,28 @@ bun preview     # Preview built app
 ## Architecture
 
 - **Entry**: `src/main.tsx` -> `src/App.tsx` -> `src/shared/routes/index.tsx`
+- **Initialization**: `src/shared/components/layout/AppInitializer.tsx`
+- **API Config**: `src/shared/api/query-client.ts`, `src/shared/api/axios.ts`
 - **Path alias**: `@` -> `./src`
 - **Build**: Vite + React + TypeScript
 - **State**: Zustand (`src/features/*/store/*.store.ts`)
-- **API Client**: Axios with interceptors for auth refresh
 - **Data Fetching**: TanStack Query
-- **UI**: Radix UI + Tailwind CSS v4 (CSS-first, shadcn/ui pattern, style: new-york)
-- **Icons**: Lucide React
-- **Forms**: React Hook Form + Zod validation
-- **Notifications**: Sonner (Toast)
+- **UI**: Radix UI + Tailwind CSS v4 (CSS-first, shadcn/ui pattern)
+- **Skeletons**: `src/shared/components/skeletons/`
 - **Routing**: React Router v6
 - **Localization**: UI uses **Bahasa Indonesia** (Indonesian) for all labels and messages.
 
 ## Feature Structure
 
 ```
-src/features/
-  auth/           # Login, Register, 2FA, password reset
-  user/           # Dashboard, user data
-  admin/          # User management, stats
-  payment/       # Premium features, checkout
-  settings/       # User settings, 2FA setup
-  content/        # Exclusive content
+src/features/    # Feature modules
+src/shared/
+  api/          # Axios & QueryClient config
+  components/
+    layout/     # AppLayout, AppInitializer
+    skeletons/  # Reusable loading states
+    ui/         # shadcn/ui components
+  routes/       # Route definitions & Protection
 ```
 
 ## Routes

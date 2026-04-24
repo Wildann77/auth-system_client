@@ -1,7 +1,11 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { Skeleton } from '@/shared/components/ui/skeleton';
-
+import { 
+  DashboardSkeleton, 
+  LoginSkeleton, 
+  PremiumSkeleton, 
+  AdminSkeleton 
+} from '@/shared/components/skeletons/AuthSkeleton';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -13,13 +17,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
 
   if (!hasHydrated) {
-
-    return <div className="p-8 space-y-4">
-      <Skeleton className="h-12 w-[250px]" />
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-[200px]" />
-    </div>;
+    return <DashboardSkeleton />;
   }
 
   if (!isAuthenticated) {
@@ -29,21 +27,12 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   return <>{children}</>;
 }
 
-
 export function GuestRoute({ children }: ProtectedRouteProps) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hasHydrated = useAuthStore((state) => state._hasHydrated);
 
   if (!hasHydrated) {
-
-    return <div className="flex items-center justify-center min-h-screen">
-      <div className="w-full max-w-md p-8 space-y-4">
-        <Skeleton className="h-8 w-[150px] mx-auto" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full mt-6" />
-      </div>
-    </div>;
+    return <LoginSkeleton />;
   }
 
   if (isAuthenticated) {
@@ -53,18 +42,13 @@ export function GuestRoute({ children }: ProtectedRouteProps) {
   return <>{children}</>;
 }
 
-
 export function PremiumRoute({ children }: ProtectedRouteProps) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hasHydrated = useAuthStore((state) => state._hasHydrated);
   const user = useAuthStore((state) => state.user);
 
   if (!hasHydrated) {
-
-    return <div className="p-8 space-y-4">
-      <Skeleton className="h-12 w-[250px]" />
-      <Skeleton className="h-64 w-full" />
-    </div>;
+    return <PremiumSkeleton />;
   }
 
   if (!isAuthenticated) {
@@ -78,19 +62,13 @@ export function PremiumRoute({ children }: ProtectedRouteProps) {
   return <>{children}</>;
 }
 
-
 export function AdminRoute({ children }: ProtectedRouteProps) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hasHydrated = useAuthStore((state) => state._hasHydrated);
   const user = useAuthStore((state) => state.user);
 
   if (!hasHydrated) {
-
-    return <div className="p-8 space-y-4">
-      <Skeleton className="h-12 w-[250px]" />
-      <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-64 w-full" />
-    </div>;
+    return <AdminSkeleton />;
   }
 
   if (!isAuthenticated) {

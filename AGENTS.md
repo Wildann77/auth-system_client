@@ -20,8 +20,12 @@ bun preview     # Preview built app
 - **State**: Zustand (`src/features/*/store/*.store.ts`)
 - **API Client**: Axios with interceptors for auth refresh
 - **Data Fetching**: TanStack Query
-- **UI**: Radix UI + Tailwind CSS (shadcn/ui pattern, style: new-york)
+- **UI**: Radix UI + Tailwind CSS v4 (CSS-first, shadcn/ui pattern, style: new-york)
+- **Icons**: Lucide React
+- **Forms**: React Hook Form + Zod validation
+- **Notifications**: Sonner (Toast)
 - **Routing**: React Router v6
+- **Localization**: UI uses **Bahasa Indonesia** (Indonesian) for all labels and messages.
 
 ## Feature Structure
 
@@ -69,12 +73,14 @@ VITE_API_URL=http://localhost:3000/api/v1
 Configured in `.env`
 
 ### Auth Flow
-1. Tokens stored in Zustand store (`useAuthStore`) - always store access token before authenticated API calls
-2. Access token passed via Authorization header
-3. Automatic token refresh on 401 response
-4. Refresh token uses HTTP-only cookie
-5. Failed refresh redirects to `/login`
-6. 2FA login: Handle 400 errors with "2FA code required" message
+1. **Instant App Load**: App starts immediately using persisted authentication state from localStorage (Zustand persist middleware)
+2. **Background Verification**: Token validity is verified asynchronously without blocking UI
+3. **Tokens stored in Zustand store (`useAuthStore`)** - always store access token before authenticated API calls
+4. **Access token passed via Authorization header**
+5. **Automatic token refresh on 401 response**
+6. **Refresh token uses HTTP-only cookie**
+7. **Failed refresh redirects to `/login`**
+8. **2FA login**: Handle 400 errors with "2FA code required" message
 
 ### API Endpoints
 
@@ -110,7 +116,10 @@ POST /payment/checkout
 
 Content API:
 GET  /content/exclusive
-```
+
+Payment Constants:
+Price: 99.000 IDR (PREMIUM_UPGRADE_PRICE)
+Currency: IDR
 
 ## Types
 
@@ -129,11 +138,14 @@ ApiResponse<T> {
 ```
 
 ## Theme
-
-**Primary color**: `#2B5D3A` (forest green)
-**Secondary color**: `#4A90E2` (blue)
-**Accent color**: `#F5A623` (orange)
-**Dark mode**: Enabled via `class` strategy
+ 
+- **Tailwind Version**: v4 (Oxide engine)
+- **Configuration**: CSS-first via `@theme` in `src/index.css`. No `tailwind.config.js`.
+- **Primary color**: `#2B5D3A` (forest green)
+- **Secondary color**: `#4A90E2` (blue)
+- **Accent color**: `#F5A623` (orange)
+- **Dark mode**: Native Tailwind v4 support, toggled via `.dark` class.
+- **Plugins**: `tailwindcss-animate` integrated via `@plugin`.
 
 ## Build Modes
 
@@ -148,21 +160,31 @@ Flat config (`eslint.config.js`). No type-aware rules.
 
 ## Important Patterns
 
-1. **Auth Store Injection**: Store is exposed to window for axios interceptor access
-2. **Loader Delay**: 100ms delay before showing loading spinner
-3. **Component Export**: Use `react-refresh/only-export-components` for HMR
-4. **Token Ordering**: Always store access tokens in Zustand store before making authenticated API calls, as axios interceptors rely on store state
-5. **2FA Error Handling**: Catch 400 errors with "2FA code required" message in login flow to trigger OTP input UI
-6. **Response Validation**: Use `result.data?.requires2FA` for consistent API response checking in auth flows
+1. **Auth Store Injection**: Store is exposed to window for axios interceptor access (`window.__authStore`)
+2. **Persist Middleware**: Zustand persist middleware handles authentication state restoration from localStorage on app start
+3. **Instant Auth UX**: App renders immediately with persisted state; no loading screens for returning users
+4. **Background Verification**: Token validation occurs asynchronously without blocking UI
+5. **Component Export**: Use `react-refresh/only-export-components` for HMR
+6. **Token Ordering**: Always store access tokens in Zustand store before making authenticated API calls, as axios interceptors rely on store state
+7. **2FA Error Handling**: Catch 400 errors with "2FA code required" message in login flow to trigger OTP input UI
+8. **Response Validation**: Use `result.data?.requires2FA` for consistent API response checking in auth flows
+9. **Dark Mode**: Managed in `AppLayout.tsx` by toggling `.dark` class on `document.documentElement`. Default is dark.
+10. **UI Language**: Always use **Bahasa Indonesia** for user-facing text (buttons, labels, messages).
 
 ## Konteks AI untuk Konsistensi
 
 Untuk AI Agent yang bekerja di repositori ini, harap perhatikan aturan berikut:
 
-1.  **Pola Auth Store**: Gunakan `window.__authStore` jika ingin mengakses state auth di luar komponen React (seperti di Axios interceptor).
-2.  **Penanganan Error API**: Selalu periksa format `ApiResponse<T>`. Backend melempar error dalam format JSON, bukan hanya status code.
-3.  **Urutan Token**: Saat mendapatkan token baru (dari refresh atau OAuth), simpan ke store **sebelum** melakukan pemanggilan API berikutnya yang membutuhkan otentikasi.
-4.  **Skema Validasi**: Jaga konsistensi antara skema Zod di frontend (`features/auth/types/auth.types.ts`) dan backend. Jika ada perubahan aturan validasi di satu sisi, wajib update di sisi lainnya.
-5.  **Multi-step Auth**: Jangan asumsikan login selalu sukses dalam satu langkah. Selalu tangani kondisi `requires2FA` atau `emailNotVerified`.
-6.  **2FA Error Handling**: Tangkap error 400 dengan pesan "2FA code required" di alur login untuk memicu UI input OTP.
-7.  **Validasi Response**: Gunakan `result.data?.requires2FA` untuk pemeriksaan response API yang konsisten di alur auth.
+1.  **Instant Auth UX**: App mulai langsung dengan state yang dipersist; tidak ada layar loading untuk user yang kembali.
+2.  **Persist Middleware**: Zustand persist middleware menangani restorasi state auth dari localStorage saat app start.
+3.  **Background Verification**: Validasi token terjadi asynchronous tanpa memblokir UI.
+4.  **Pola Auth Store**: Gunakan `window.__authStore` jika ingin mengakses state auth di luar komponen React (seperti di Axios interceptor).
+5.  **Penanganan Error API**: Selalu periksa format `ApiResponse<T>`. Backend melempar error dalam format JSON, bukan hanya status code.
+6.  **Urutan Token**: Saat mendapatkan token baru (dari refresh atau OAuth), simpan ke store **sebelum** melakukan pemanggilan API berikutnya yang membutuhkan otentikasi.
+7.  **Skema Validasi**: Jaga konsistensi antara skema Zod di frontend (`features/auth/types/auth.types.ts`) dan backend. Jika ada perubahan aturan validasi di satu sisi, wajib update di sisi lainnya.
+8.  **Multi-step Auth**: Jangan asumsikan login selalu sukses dalam satu langkah. Selalu tangani kondisi `requires2FA` atau `emailNotVerified`.
+9.  **2FA Error Handling**: Tangkap error 400 dengan pesan "2FA code required" di alur login untuk memicu UI input OTP.
+10. **Validasi Response**: Gunakan `result.data?.requires2FA` untuk pemeriksaan response API yang konsisten di alur auth.
+11. **Bahasa UI**: Gunakan **Bahasa Indonesia** untuk semua teks yang terlihat oleh user (labels, placeholders, toast messages).
+12. **Tailwind v4**: Jangan gunakan `tailwind.config.js`. Semua kustomisasi tema harus dilakukan di `src/index.css` di dalam block `@theme`.
+13. **Form Validation**: Selalu gunakan Zod schema yang didefinisikan di `features/*/types/*.ts` dan integrasikan dengan React Hook Form.

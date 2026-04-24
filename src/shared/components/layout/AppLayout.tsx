@@ -25,6 +25,7 @@ import {
 } from '@/shared/components/ui/dropdown-menu';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useLogout } from '@/features/auth/hooks/mutations/useLogin';
+import { useTheme } from 'next-themes';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -35,15 +36,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const user = useAuthStore((state) => state.user);
   const logout = useLogout();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
+  const { theme, setTheme } = useTheme();
 
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -81,9 +74,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setDarkMode(!darkMode)}
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
-          {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
       </header>
 
@@ -184,9 +177,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           >
-            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

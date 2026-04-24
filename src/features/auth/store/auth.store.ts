@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import api from '@/shared/api/axios';
 import type { User, ApiResponse } from '@/shared/types';
 
@@ -14,11 +15,13 @@ interface AuthState {
   initializeAuth: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
-  user: null,
-  accessToken: null,
-  isAuthenticated: false,
-  isLoading: true,
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      user: null,
+      accessToken: null,
+      isAuthenticated: false,
+      isLoading: true,
 
   setAuth: (user, accessToken) => {
     set({ user, accessToken, isAuthenticated: true, isLoading: false });
@@ -54,21 +57,38 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             set({
               user: userResponse.data.data,
               isAuthenticated: true,
-              isLoading: false
             });
             return;
           }
         } catch {
           // User fetch failed, clear auth
+          set({ user: null, accessToken: null, isAuthenticated: false });
         }
+      } else {
+        // No new token, clear any stale persisted state
+        set({ user: null, accessToken: null, isAuthenticated: false });
       }
     } catch {
-      // Refresh token failed, user is guest
+      // Refresh token failed, clear any stale persisted state
+      set({ user: null, accessToken: null, isAuthenticated: false });
     }
-
-    set({ isLoading: false });
   },
-}));
+}),
+    {
+      name: 'auth-storage',
+      partialize: (state) => ({
+        user: state.user,
+        accessToken: state.accessToken,
+        isAuthenticated: state.isAuthenticated,
+      }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.isLoading = false;
+        }
+      },
+    }
+  )
+);
 
 // Make auth store accessible to axios interceptor
 (window as unknown as { __authStore?: AuthState }).__authStore = useAuthStore.getState();

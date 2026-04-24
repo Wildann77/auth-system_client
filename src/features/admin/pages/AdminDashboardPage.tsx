@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -11,6 +11,7 @@ import {
   Loader2,
   Trash2,
   Edit,
+  Search,
 } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card';
@@ -33,6 +34,17 @@ export default function AdminDashboardPage() {
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [verifiedFilter, setVerifiedFilter] = useState<string>('all');
   const [providerFilter, setProviderFilter] = useState<string>('all');
+  const [searchInput, setSearchInput] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+      setPage(1); // Reset page to 1 when search changes
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['admin-stats'],
@@ -40,13 +52,14 @@ export default function AdminDashboardPage() {
   });
 
   const { data: usersData, isLoading: usersLoading } = useQuery({
-    queryKey: ['admin-users', page, limit, roleFilter, verifiedFilter, providerFilter],
+    queryKey: ['admin-users', page, limit, roleFilter, verifiedFilter, providerFilter, debouncedSearch],
     queryFn: () => adminApi.getUsers({
       page,
       limit,
       role: roleFilter === 'all' ? undefined : roleFilter as any,
       isEmailVerified: verifiedFilter === 'all' ? undefined : verifiedFilter as any,
       provider: providerFilter === 'all' ? undefined : providerFilter as any,
+      search: debouncedSearch || undefined,
     }),
   });
 
@@ -159,10 +172,11 @@ export default function AdminDashboardPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Filters */}
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <Label>Role:</Label>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+            {/* Filters */}
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Label>Role:</Label>
               <Select value={roleFilter} onValueChange={setRoleFilter}>
                 <SelectTrigger className="w-[120px]">
                   <SelectValue placeholder="Semua" />
@@ -201,6 +215,19 @@ export default function AdminDashboardPage() {
               </Select>
             </div>
           </div>
+          
+          {/* Search */}
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Cari email atau nama..."
+              className="pl-9 bg-background"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+          </div>
+        </div>
 
           {/* Table */}
           <div className="rounded-md border">

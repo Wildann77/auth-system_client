@@ -106,7 +106,7 @@ GET  /user/me
 PATCH /user/me
 
 Admin API:
-GET  /admin/users        # Paginated user list
+GET  /admin/users        # Paginated user list with search/filters
 GET  /admin/stats      # Dashboard stats
 PATCH /admin/users/:id/role
 DELETE /admin/users/:id
@@ -141,10 +141,9 @@ ApiResponse<T> {
 ## Theme
  
 - **Tailwind Version**: v4 (Oxide engine)
-- **Configuration**: CSS-first via `@theme` in `src/index.css`. No `tailwind.config.js`.
-- **Primary color**: `#2B5D3A` (forest green)
-- **Secondary color**: `#4A90E2` (blue)
-- **Accent color**: `#F5A623` (orange)
+- **Configuration**: CSS-first via `@theme inline` in `src/index.css`. No `tailwind.config.js`.
+- **Colors**: Menggunakan OKLCH format (Primary: `oklch(0.6397 0.1720 36.4421)`, Secondary: `oklch(0.9670 0.0029 264.5419)`, Accent: `oklch(0.9119 0.0222 243.8174)`)
+- **Fonts**: `Inter` (Sans), `Source Serif 4` (Serif), `JetBrains Mono` (Mono).
 - **Dark mode**: Native Tailwind v4 support, toggled via `.dark` class.
 - **Plugins**: `tailwindcss-animate` integrated via `@plugin`.
 

@@ -107,6 +107,7 @@ export const adminApi = {
     role?: 'USER' | 'ADMIN';
     isEmailVerified?: 'true' | 'false';
     provider?: 'LOCAL' | 'GOOGLE';
+    search?: string;
   }) => {
     const response = await api.get<ApiResponse<{
       items: User[];

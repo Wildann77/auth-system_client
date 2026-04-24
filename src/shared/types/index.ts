@@ -10,6 +10,7 @@ export interface User {
   isPremium: boolean;
   premiumUntil: string | null;
   lastLoginAt: string | null;
+  tokenVersion: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -39,7 +40,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'isPremium' | 'lastLoginAt' | 'twoFactorEnabled'>;
+  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'isPremium' | 'lastLoginAt' | 'twoFactorEnabled' | 'tokenVersion'>;
   accessToken: string;
   requires2FA?: boolean;
 }

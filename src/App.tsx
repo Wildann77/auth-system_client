@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from 'next-themes';
@@ -17,14 +17,19 @@ const queryClient = new QueryClient({
 
 function AppInitializer({ children }: { children: React.ReactNode }) {
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  const initialized = useRef(false);
 
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+    
     // Perform background auth verification without blocking UI
     initializeAuth();
   }, [initializeAuth]);
 
   return <>{children}</>;
 }
+
 
 function App() {
   return (

@@ -47,6 +47,9 @@ export const useAuthStore = create<AuthState>()(
   },
 
   initializeAuth: async () => {
+    if (get().isLoading) return;
+    set({ isLoading: true });
+
     try {
       const response = await api.post<ApiResponse<{ accessToken: string }>>('/auth/refresh-token', {});
       const newToken = response.data.data?.accessToken;
@@ -62,7 +65,6 @@ export const useAuthStore = create<AuthState>()(
               user: userResponse.data.data,
               isAuthenticated: true,
             });
-            return;
           }
         } catch {
           // User fetch failed, clear auth
@@ -72,11 +74,14 @@ export const useAuthStore = create<AuthState>()(
         // No new token, clear any stale persisted state
         set({ user: null, accessToken: null, isAuthenticated: false });
       }
-    } catch {
-      // Refresh token failed, clear any stale persisted state
+    } catch (error) {
+      // If it's a 401 on refresh, it's a real session expiry
       set({ user: null, accessToken: null, isAuthenticated: false });
+    } finally {
+      set({ isLoading: false });
     }
   },
+
 }),
     {
       name: 'auth-storage',

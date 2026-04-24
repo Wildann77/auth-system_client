@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -107,7 +107,7 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Verified Users</CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
@@ -121,7 +121,7 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Admins</CardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
@@ -135,7 +135,7 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Premium Users</CardTitle>
             <Crown className="h-4 w-4 text-muted-foreground" />
@@ -151,7 +151,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Users Table */}
-      <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+      <Card className="glass shadow-md">
         <CardHeader>
           <CardTitle>Daftar Pengguna</CardTitle>
           <CardDescription>

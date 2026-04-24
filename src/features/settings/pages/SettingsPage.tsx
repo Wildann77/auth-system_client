@@ -86,7 +86,7 @@ export default function SettingsPage() {
         </TabsList>
 
         <TabsContent value="profile" className="mt-6">
-          <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+          <Card className="glass shadow-md">
             <CardHeader>
               <CardTitle>Informasi Profil</CardTitle>
               <CardDescription>
@@ -157,7 +157,7 @@ export default function SettingsPage() {
 
         {user.provider === 'LOCAL' && (
           <TabsContent value="security" className="mt-6">
-            <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+            <Card className="glass shadow-md">
               <CardHeader>
                 <CardTitle>Ubah Password</CardTitle>
                 <CardDescription>
@@ -240,7 +240,7 @@ export default function SettingsPage() {
         )}
 
         <TabsContent value="2fa" className="mt-6">
-          <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+          <Card className="glass shadow-md">
             <CardHeader>
               <CardTitle>Two-Factor Authentication (2FA)</CardTitle>
               <CardDescription>

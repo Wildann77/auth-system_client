@@ -37,8 +37,8 @@ export default function AuthSuccessPage() {
   }, [searchParams, navigate, setAuth, setAccessToken]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-      <Card className="w-full max-w-md backdrop-blur-sm bg-white/5 border-white/10">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/50 to-background p-4">
+      <Card className="w-full max-w-md glass shadow-md">
         <CardContent className="flex flex-col items-center justify-center py-12 space-y-4">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
           <p className="text-muted-foreground">Memproses login...</p>

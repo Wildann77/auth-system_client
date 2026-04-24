@@ -18,7 +18,7 @@ export default function ContentPage() {
   if (error) {
     return (
       <div className="p-6">
-        <Card className="max-w-md mx-auto backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="max-w-md mx-auto glass shadow-md">
           <CardContent className="flex flex-col items-center justify-center py-12 space-y-4">
             <Lock className="h-12 w-12 text-muted-foreground" />
             <p className="text-center text-muted-foreground">
@@ -43,7 +43,7 @@ export default function ContentPage() {
       </div>
 
       {contentData?.data && Array.isArray(contentData.data) && contentData.data.length === 0 ? (
-        <Card className="max-w-2xl mx-auto backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="max-w-2xl mx-auto glass shadow-md">
           <CardContent className="flex flex-col items-center justify-center py-12 space-y-4">
             <Crown className="h-12 w-12 text-muted-foreground" />
             <h3 className="text-lg font-semibold">Belum Ada Konten</h3>
@@ -55,7 +55,7 @@ export default function ContentPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.isArray(contentData?.data) && contentData.data.map((content) => (
-            <Card key={content.id} className="backdrop-blur-sm bg-white/5 border-white/10 overflow-hidden">
+            <Card key={content.id} className="glass shadow-md overflow-hidden">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-lg">{content.title}</CardTitle>
@@ -123,7 +123,7 @@ function ContentSkeleton() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
-          <Card key={i} className="backdrop-blur-sm bg-white/5 border-white/10">
+          <Card key={i} className="glass shadow-md">
             <CardHeader>
               <Skeleton className="h-6 w-3/4" />
               <Skeleton className="h-4 w-full mt-2" />

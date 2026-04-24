@@ -97,7 +97,7 @@ export default function Setup2FAPage() {
         </div>
       </div>
 
-      <Card className="backdrop-blur-sm bg-white/5 border-white/10 max-w-2xl">
+      <Card className="glass shadow-md max-w-2xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />

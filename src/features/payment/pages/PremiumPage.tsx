@@ -93,7 +93,7 @@ export default function PremiumPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {/* Features Card */}
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardHeader>
             <CardTitle>Fitur Premium</CardTitle>
             <CardDescription>
@@ -206,7 +206,7 @@ export default function PremiumPage() {
       {/* FAQ Section */}
       <div className="max-w-2xl mx-auto space-y-4">
         <h2 className="text-2xl font-bold text-center">Pertanyaan Umum</h2>
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardContent className="space-y-4">
             <div>
               <h3 className="font-medium">Bagaimana cara upgrade?</h3>

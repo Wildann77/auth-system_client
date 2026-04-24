@@ -5,8 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 
 export default function NotFoundPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-      <Card className="w-full max-w-md backdrop-blur-sm bg-white/5 border-white/10 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/50 to-background p-4">
+      <Card className="w-full max-w-md glass shadow-2xl text-center">
         <CardHeader>
           <CardTitle className="text-8xl font-bold text-primary">404</CardTitle>
           <CardDescription className="text-xl">

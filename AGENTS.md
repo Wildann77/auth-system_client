@@ -189,3 +189,4 @@ Untuk AI Agent yang bekerja di repositori ini, harap perhatikan aturan berikut:
 11. **Bahasa UI**: Gunakan **Bahasa Indonesia** untuk semua teks yang terlihat oleh user (labels, placeholders, toast messages).
 12. **Tailwind v4**: Jangan gunakan `tailwind.config.js`. Semua kustomisasi tema harus dilakukan di `src/index.css` di dalam block `@theme`.
 13. **Form Validation**: Selalu gunakan Zod schema yang didefinisikan di `features/*/types/*.ts` dan integrasikan dengan React Hook Form.
+14. **Theme Colors & UI**: Hindari penggunaan warna hardcoded (seperti `bg-slate-900` atau `bg-white/5`) pada background dan card. Gunakan variabel tema Tailwind v4 (contoh: `bg-background`, `bg-card`) atau utility `.glass` yang sudah disediakan di `index.css` agar mendukung transisi Dark/Light Mode dengan sempurna.

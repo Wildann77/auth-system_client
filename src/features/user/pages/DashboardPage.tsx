@@ -45,7 +45,7 @@ export default function DashboardPage() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Status</CardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
@@ -68,7 +68,7 @@ export default function DashboardPage() {
         </Card>
 
         {user.role !== 'ADMIN' && (
-          <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+          <Card className="glass shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Premium</CardTitle>
               <Crown className="h-4 w-4 text-muted-foreground" />
@@ -96,7 +96,7 @@ export default function DashboardPage() {
           </Card>
         )}
 
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Provider</CardTitle>
           </CardHeader>
@@ -107,7 +107,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="backdrop-blur-sm bg-white/5 border-white/10">
+        <Card className="glass shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Terakhir Login</CardTitle>
           </CardHeader>
@@ -122,7 +122,7 @@ export default function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Link to="/settings">
-          <Card className="backdrop-blur-sm bg-white/5 border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+          <Card className="glass shadow-md hover:shadow-lg transition-all cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/10">
@@ -163,7 +163,7 @@ export default function DashboardPage() {
 
         {user.role !== 'ADMIN' && user.isPremium && (
           <Link to="/content">
-            <Card className="backdrop-blur-sm bg-white/5 border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+            <Card className="glass shadow-md hover:shadow-lg transition-all cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
@@ -184,7 +184,7 @@ export default function DashboardPage() {
 
         {user.role === 'ADMIN' && (
           <Link to="/admin">
-            <Card className="backdrop-blur-sm bg-white/5 border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+            <Card className="glass shadow-md hover:shadow-lg transition-all cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-purple-500/10">

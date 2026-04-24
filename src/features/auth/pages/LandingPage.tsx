@@ -24,7 +24,7 @@ const FEATURES = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/50 to-background">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-40 px-4 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -76,7 +76,7 @@ export default function LandingPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {FEATURES.map((feature, i) => (
-              <Card key={i} className="backdrop-blur-sm bg-white/5 border-white/10">
+              <Card key={i} className="glass shadow-md">
                 <CardHeader>
                   <CardTitle className="text-lg">{feature.title}</CardTitle>
                   <CardDescription>{feature.description}</CardDescription>

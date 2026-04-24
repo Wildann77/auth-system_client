@@ -130,7 +130,7 @@ User {
   role: 'USER' | 'ADMIN'
   provider: 'LOCAL' | 'GOOGLE'
   isEmailVerified, twoFactorEnabled
-  isPremium, premiumUntil, lastLoginAt, tokenVersion, createdAt, updatedAt
+  isPremium, premiumUntil, lastLoginAt, tokenVersion, avatarUrl, createdAt, updatedAt
 }
 
 ApiResponse<T> {

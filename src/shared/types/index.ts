@@ -7,6 +7,7 @@ export interface User {
   provider: 'LOCAL' | 'GOOGLE';
   isEmailVerified: boolean;
   twoFactorEnabled: boolean;
+  avatarUrl: string | null;
   isPremium: boolean;
   premiumUntil: string | null;
   lastLoginAt: string | null;
@@ -40,7 +41,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'isPremium' | 'lastLoginAt' | 'twoFactorEnabled' | 'tokenVersion'>;
+  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'isPremium' | 'lastLoginAt' | 'twoFactorEnabled' | 'tokenVersion' | 'avatarUrl'>;
   accessToken: string;
   requires2FA?: boolean;
 }

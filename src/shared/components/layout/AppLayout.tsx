@@ -138,7 +138,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-3 w-full p-2 rounded-md hover:bg-accent">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="" />
+                  <AvatarImage src={user?.avatarUrl || ''} alt={user?.firstName || ''} />
                   <AvatarFallback>{getInitials()}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 text-left">
@@ -185,10 +185,14 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="gap-2">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="" />
+                  <AvatarImage src={user?.avatarUrl || ''} alt={user?.firstName || ''} />
                   <AvatarFallback>{getInitials()}</AvatarFallback>
                 </Avatar>
-                <span>{user?.email}</span>
+                <span className="font-medium">
+                  {user?.firstName && user?.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : user?.firstName || user?.email?.split('@')[0]}
+                </span>
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

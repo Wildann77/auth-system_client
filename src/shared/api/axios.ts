@@ -88,7 +88,6 @@ api.interceptors.response.use(
         const authStore = (window as unknown as { __authStore?: { clearAuth: () => void } }).__authStore;
         authStore?.clearAuth();
 
-        window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

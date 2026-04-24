@@ -8,7 +8,9 @@ interface AuthState {
   accessToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  _hasHydrated: boolean;
   setAuth: (user: User, accessToken: string) => void;
+
   setAccessToken: (token: string) => void;
   clearAuth: () => void;
   updateUser: (user: Partial<User>) => void;
@@ -20,8 +22,9 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       accessToken: null,
-      isAuthenticated: false,
-      isLoading: true,
+      isLoading: false,
+      _hasHydrated: false,
+
 
   setAuth: (user, accessToken) => {
     set({ user, accessToken, isAuthenticated: true, isLoading: false });
@@ -83,9 +86,10 @@ export const useAuthStore = create<AuthState>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
-          state.isLoading = false;
+          state._hasHydrated = true;
         }
       },
+
     }
   )
 );

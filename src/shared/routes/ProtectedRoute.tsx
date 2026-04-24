@@ -9,10 +9,11 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const isLoading = useAuthStore((state) => state.isLoading);
+  const hasHydrated = useAuthStore((state) => state._hasHydrated);
   const location = useLocation();
 
-  if (isLoading) {
+  if (!hasHydrated) {
+
     return <div className="p-8 space-y-4">
       <Skeleton className="h-12 w-[250px]" />
       <Skeleton className="h-4 w-full" />
@@ -31,9 +32,10 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
 export function GuestRoute({ children }: ProtectedRouteProps) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const isLoading = useAuthStore((state) => state.isLoading);
+  const hasHydrated = useAuthStore((state) => state._hasHydrated);
 
-  if (isLoading) {
+  if (!hasHydrated) {
+
     return <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md p-8 space-y-4">
         <Skeleton className="h-8 w-[150px] mx-auto" />
@@ -54,10 +56,11 @@ export function GuestRoute({ children }: ProtectedRouteProps) {
 
 export function PremiumRoute({ children }: ProtectedRouteProps) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const isLoading = useAuthStore((state) => state.isLoading);
+  const hasHydrated = useAuthStore((state) => state._hasHydrated);
   const user = useAuthStore((state) => state.user);
 
-  if (isLoading) {
+  if (!hasHydrated) {
+
     return <div className="p-8 space-y-4">
       <Skeleton className="h-12 w-[250px]" />
       <Skeleton className="h-64 w-full" />
@@ -78,10 +81,11 @@ export function PremiumRoute({ children }: ProtectedRouteProps) {
 
 export function AdminRoute({ children }: ProtectedRouteProps) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const isLoading = useAuthStore((state) => state.isLoading);
+  const hasHydrated = useAuthStore((state) => state._hasHydrated);
   const user = useAuthStore((state) => state.user);
 
-  if (isLoading) {
+  if (!hasHydrated) {
+
     return <div className="p-8 space-y-4">
       <Skeleton className="h-12 w-[250px]" />
       <Skeleton className="h-10 w-full" />

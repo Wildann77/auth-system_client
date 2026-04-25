@@ -136,6 +136,10 @@ User {
 ApiResponse<T> {
   success, message, data: T | null, error: { code, details? }
 }
+
+AdminStats {
+  totalUsers, verifiedUsers, adminCount, premiumCount, usersByDay: { date, count }[]
+}
 ```
 
 ## Theme

@@ -12,6 +12,7 @@ import SettingsPage from '@/features/settings/pages/SettingsPage';
 import Setup2FAPage from '@/features/settings/pages/Setup2FAPage';
 import PremiumPage from '@/features/payment/pages/PremiumPage';
 import ContentPage from '@/features/content/pages/ContentPage';
+import PaymentSuccessPage from '@/features/payment/pages/PaymentSuccessPage';
 import AdminDashboardPage from '@/features/admin/pages/AdminDashboardPage';
 import NotFoundPage from './NotFoundPage';
 
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
   {
     path: '/content',
     element: <ProtectedRoute><AppLayout><ContentPage /></AppLayout></ProtectedRoute>,
+  },
+  {
+    path: '/payment/success',
+    element: <ProtectedRoute><AppLayout><PaymentSuccessPage /></AppLayout></ProtectedRoute>,
   },
   {
     path: '/admin',

@@ -44,7 +44,7 @@ export const authApi = {
   },
 
   resetPassword: async (data: ResetPasswordRequest) => {
-    const response = await api.post<ApiResponse<null>>('/auth/reset-password', data);
+    const response = await api.post<ApiResponse<{ tokens: { accessToken: string; refreshToken: string; expiresIn: number } }>>('/auth/reset-password', data);
     return response.data;
   },
 
@@ -64,7 +64,7 @@ export const authApi = {
   },
 
   changePassword: async (data: ChangePasswordRequest) => {
-    const response = await api.post<ApiResponse<null>>('/auth/change-password', data);
+    const response = await api.post<ApiResponse<{ tokens: { accessToken: string; refreshToken: string; expiresIn: number } }>>('/auth/change-password', data);
     return response.data;
   },
 

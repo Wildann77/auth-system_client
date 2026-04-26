@@ -64,13 +64,18 @@ export function useDisable2FA() {
 }
 
 export function useChangePassword() {
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+
   return useMutation({
     mutationFn: async ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) => {
       const response = await authApi.changePassword({ currentPassword, newPassword });
       return response;
     },
-    onSuccess: (response: ApiResponse<null>) => {
+    onSuccess: (response) => {
       if (response.success) {
+        if (response.data?.tokens?.accessToken) {
+          setAccessToken(response.data.tokens.accessToken);
+        }
         toast.success('Password berhasil diubah!');
       }
     },

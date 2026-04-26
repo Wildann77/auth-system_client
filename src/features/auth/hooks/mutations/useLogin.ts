@@ -88,7 +88,7 @@ export function useResetPassword() {
       const response = await authApi.resetPassword({ token, password });
       return response;
     },
-    onSuccess: (response: ApiResponse<null>) => {
+    onSuccess: (response) => {
       if (response.success) {
         toast.success('Password berhasil direset!');
         navigate('/login');

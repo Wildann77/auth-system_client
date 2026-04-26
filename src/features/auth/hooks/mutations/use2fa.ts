@@ -73,8 +73,8 @@ export function useChangePassword() {
     },
     onSuccess: (response) => {
       if (response.success) {
-        if (response.data?.tokens?.accessToken) {
-          setAccessToken(response.data.tokens.accessToken);
+        if (response.data?.accessToken) {
+          setAccessToken(response.data.accessToken);
         }
         toast.success('Password berhasil diubah!');
       }

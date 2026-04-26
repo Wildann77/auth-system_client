@@ -92,6 +92,11 @@ export default function DashboardPage() {
                   Berakhir: {formatDateTime(user.premiumUntil)}
                 </p>
               )}
+              {user.isPremium && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Perpanjangan Otomatis: <strong className={user.autoRenew ? 'text-green-500' : 'text-red-500'}>{user.autoRenew ? 'Aktif' : 'Nonaktif'}</strong>
+                </p>
+              )}
             </CardContent>
           </Card>
         )}
@@ -180,6 +185,39 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </Link>
+        )}
+
+        {user.role !== 'ADMIN' && user.isPremium && user.autoRenew && (
+          <Card 
+            className="glass shadow-md hover:shadow-lg transition-all cursor-pointer border-red-500/20"
+            onClick={async () => {
+              if (window.confirm('Apakah Anda yakin ingin membatalkan perpanjangan otomatis langganan Premium?')) {
+                try {
+                  const { paymentApi } = await import('@/features/auth/api/auth.api');
+                  const { useAuthStore } = await import('@/features/auth/store/auth.store');
+                  await paymentApi.cancelSubscription();
+                  alert('Langganan berhasil dibatalkan. Anda tetap dapat menikmati akses Premium hingga akhir periode.');
+                  useAuthStore.getState().initializeAuth();
+                } catch (e: any) {
+                  alert(e.response?.data?.message || 'Gagal membatalkan langganan');
+                }
+              }
+            }}
+          >
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-red-500/10">
+                  <CreditCard className="h-5 w-5 text-red-500" />
+                </div>
+                <CardTitle className="text-lg text-red-500">Batalkan Langganan</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Hentikan perpanjangan otomatis
+              </CardDescription>
+            </CardContent>
+          </Card>
         )}
 
         {user.role === 'ADMIN' && (

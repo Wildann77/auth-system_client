@@ -113,6 +113,7 @@ DELETE /admin/users/:id
 
 Payment API:
 POST /payment/checkout
+POST /payment/cancel     # Cancel active premium subscription
 
 Content API:
 GET  /content/exclusive
@@ -130,7 +131,7 @@ User {
   role: 'USER' | 'ADMIN'
   provider: 'LOCAL' | 'GOOGLE'
   isEmailVerified, twoFactorEnabled
-  isPremium, premiumUntil, lastLoginAt, tokenVersion, avatarUrl, createdAt, updatedAt
+  isPremium, autoRenew, premiumUntil, lastLoginAt, tokenVersion, avatarUrl, createdAt, updatedAt
 }
 
 ApiResponse<T> {
@@ -194,3 +195,4 @@ Untuk AI Agent yang bekerja di repositori ini, harap perhatikan aturan berikut:
 13. **Form Validation**: Selalu gunakan Zod schema yang didefinisikan di `features/*/types/*.ts` dan integrasikan dengan React Hook Form.
 14. **Theme Colors & UI**: Hindari penggunaan warna hardcoded (seperti `bg-slate-900` atau `bg-white/5`) pada background dan card. Gunakan variabel tema Tailwind v4 (contoh: `bg-background`, `bg-card`) atau utility `.glass` yang sudah disediakan di `index.css` agar mendukung transisi Dark/Light Mode dengan sempurna.
 15. **Seamless Session Continuity**: Setiap response sukses dari update sensitif (seperti ganti password) akan berisi `accessToken` baru dari backend. Wajib perbarui `accessToken` di store menggunakan `setAccessToken` agar user tidak terkena error 401 dan tidak perlu login ulang. **Note: refreshToken dikelola via HTTP-Only cookie dan tidak akan muncul di response body.**
+16. **Premium Auto-Renew UI**: Pada `DashboardPage`, UI bereaksi pada status `autoRenew`. Jika `user.isPremium` & `user.autoRenew` aktif, tampilkan tombol "Batalkan Langganan". Aksi ini akan memanggil `/payment/cancel` lalu menjalankan `initializeAuth` untuk me-refresh data tanpa reload penuh.

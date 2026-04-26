@@ -156,6 +156,11 @@ export const paymentApi = {
     }>>('/payment/checkout', data);
     return response.data;
   },
+
+  cancelSubscription: async () => {
+    const response = await api.post<ApiResponse<null>>('/payment/cancel');
+    return response.data;
+  },
 };
 
 export const contentApi = {

@@ -9,6 +9,7 @@ export interface User {
   twoFactorEnabled: boolean;
   avatarUrl: string | null;
   isPremium: boolean;
+  autoRenew: boolean;
   premiumUntil: string | null;
   lastLoginAt: string | null;
   tokenVersion: number;
@@ -41,7 +42,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'isPremium' | 'lastLoginAt' | 'twoFactorEnabled' | 'tokenVersion' | 'avatarUrl'>;
+  user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role' | 'isPremium' | 'autoRenew' | 'premiumUntil' | 'lastLoginAt' | 'twoFactorEnabled' | 'tokenVersion' | 'avatarUrl'>;
   accessToken: string;
   requires2FA?: boolean;
 }

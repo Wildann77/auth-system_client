@@ -24,6 +24,7 @@ import { Skeleton } from '@/shared/components/ui/skeleton';
 import { toast } from 'sonner';
 import { adminApi } from '@/features/auth/api/auth.api';
 import type { User, AdminStats } from '@/shared/types';
+import { USER_ROLE, AUTH_PROVIDER } from '@/shared/constants';
 
 export default function AdminDashboardPage() {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ export default function AdminDashboardPage() {
   });
 
   const updateRoleMutation = useMutation({
-    mutationFn: ({ userId, role }: { userId: string; role: 'USER' | 'ADMIN' }) =>
+    mutationFn: ({ userId, role }: { userId: string; role: typeof USER_ROLE[keyof typeof USER_ROLE] }) =>
       adminApi.updateUserRole(userId, { role }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
@@ -177,8 +178,8 @@ export default function AdminDashboardPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Semua</SelectItem>
-                  <SelectItem value="USER">User</SelectItem>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
+                  <SelectItem value={USER_ROLE.USER}>User</SelectItem>
+                  <SelectItem value={USER_ROLE.ADMIN}>Admin</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -203,8 +204,8 @@ export default function AdminDashboardPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Semua</SelectItem>
-                  <SelectItem value="LOCAL">Local</SelectItem>
-                  <SelectItem value="GOOGLE">Google</SelectItem>
+                  <SelectItem value={AUTH_PROVIDER.LOCAL}>Local</SelectItem>
+                  <SelectItem value={AUTH_PROVIDER.GOOGLE}>Google</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -266,7 +267,7 @@ export default function AdminDashboardPage() {
                           : user.firstName || user.email.split('@')[0]}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={user.role === 'ADMIN' ? 'default' : 'secondary'}>
+                        <Badge variant={user.role === USER_ROLE.ADMIN ? 'default' : 'secondary'}>
                           {user.role}
                         </Badge>
                       </TableCell>
@@ -287,11 +288,11 @@ export default function AdminDashboardPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          {user.role !== 'ADMIN' && (
+                          {user.role !== USER_ROLE.ADMIN && (
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => updateRoleMutation.mutate({ userId: user.id, role: 'ADMIN' })}
+                              onClick={() => updateRoleMutation.mutate({ userId: user.id, role: USER_ROLE.ADMIN })}
                               disabled={updateRoleMutation.isPending}
                             >
                               <Shield className="h-4 w-4 mr-1" />

@@ -7,9 +7,9 @@ import { Badge } from '@/shared/components/ui/badge';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { paymentApi } from '@/features/auth/api/auth.api';
 import { toast } from 'sonner';
-import { PAYMENT_CONSTANTS } from '../constants';
+import { FINANCIALS, ORDER_TYPE, PAYMENT_PROVIDER } from '@/shared/constants';
 
-const PREMIUM_PRICE = PAYMENT_CONSTANTS.PREMIUM_UPGRADE_PRICE; // Rp 99,000
+const PREMIUM_PRICE = FINANCIALS.PREMIUM_UPGRADE_PRICE;
 
 const FEATURES = [
   'Akses konten eksklusif premium',
@@ -149,9 +149,9 @@ export default function PremiumPage() {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => setProvider('midtrans')}
+                    onClick={() => setProvider(PAYMENT_PROVIDER.MIDTRANS)}
                     className={`p-3 rounded-lg border text-center transition-colors ${
-                      provider === 'midtrans'
+                      provider === PAYMENT_PROVIDER.MIDTRANS
                         ? 'border-primary bg-primary/10'
                         : 'border-border hover:border-primary/50'
                     }`}
@@ -161,9 +161,9 @@ export default function PremiumPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setProvider('stripe')}
+                    onClick={() => setProvider(PAYMENT_PROVIDER.STRIPE)}
                     className={`p-3 rounded-lg border text-center transition-colors ${
-                      provider === 'stripe'
+                      provider === PAYMENT_PROVIDER.STRIPE
                         ? 'border-primary bg-primary/10'
                         : 'border-border hover:border-primary/50'
                     }`}

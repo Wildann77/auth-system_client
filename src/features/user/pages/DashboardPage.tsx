@@ -15,6 +15,7 @@ import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { formatDateTime } from '@/shared/lib/utils';
+import { USER_ROLE, AUTH_PROVIDER } from '@/shared/constants';
 
 export default function DashboardPage() {
   const user = useAuthStore((state) => state.user);
@@ -67,7 +68,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {user.role !== 'ADMIN' && (
+        {user.role !== USER_ROLE.ADMIN && (
           <Card className="glass shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Premium</CardTitle>
@@ -106,7 +107,7 @@ export default function DashboardPage() {
             <CardTitle className="text-sm font-medium">Provider</CardTitle>
           </CardHeader>
           <CardContent>
-            <Badge variant={user.provider === 'GOOGLE' ? 'secondary' : 'outline'}>
+            <Badge variant={user.provider === AUTH_PROVIDER.GOOGLE ? 'secondary' : 'outline'}>
               {user.provider}
             </Badge>
           </CardContent>
@@ -145,7 +146,7 @@ export default function DashboardPage() {
           </Card>
         </Link>
 
-        {user.role !== 'ADMIN' && !user.isPremium && (
+        {user.role !== USER_ROLE.ADMIN && !user.isPremium && (
           <Link to="/premium">
             <Card className="backdrop-blur-sm bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/20 hover:from-yellow-500/20 to-orange-500/20 transition-colors cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between">
@@ -166,7 +167,7 @@ export default function DashboardPage() {
           </Link>
         )}
 
-        {user.role !== 'ADMIN' && user.isPremium && (
+        {user.role !== USER_ROLE.ADMIN && user.isPremium && (
           <Link to="/content">
             <Card className="glass shadow-md hover:shadow-lg transition-all cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between">
@@ -187,7 +188,7 @@ export default function DashboardPage() {
           </Link>
         )}
 
-        {user.role !== 'ADMIN' && user.isPremium && user.autoRenew && (
+        {user.role !== USER_ROLE.ADMIN && user.isPremium && user.autoRenew && (
           <Card 
             className="glass shadow-md hover:shadow-lg transition-all cursor-pointer border-red-500/20"
             onClick={async () => {
@@ -220,7 +221,7 @@ export default function DashboardPage() {
           </Card>
         )}
 
-        {user.role === 'ADMIN' && (
+        {user.role === USER_ROLE.ADMIN && (
           <Link to="/admin">
             <Card className="glass shadow-md hover:shadow-lg transition-all cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between">

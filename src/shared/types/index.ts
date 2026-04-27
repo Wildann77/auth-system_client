@@ -1,10 +1,12 @@
+import { USER_ROLE, AUTH_PROVIDER, PAYMENT_PROVIDER, ORDER_TYPE } from '../constants';
+
 export interface User {
   id: string;
   email: string;
   firstName: string | null;
   lastName: string | null;
-  role: 'USER' | 'ADMIN';
-  provider: 'LOCAL' | 'GOOGLE';
+  role: typeof USER_ROLE[keyof typeof USER_ROLE];
+  provider: typeof AUTH_PROVIDER[keyof typeof AUTH_PROVIDER];
   isEmailVerified: boolean;
   twoFactorEnabled: boolean;
   avatarUrl: string | null;
@@ -97,7 +99,7 @@ export interface UpdateProfileRequest {
 }
 
 export interface AdminUpdateRoleRequest {
-  role: 'USER' | 'ADMIN';
+  role: typeof USER_ROLE[keyof typeof USER_ROLE];
 }
 
 export interface OrderItem {
@@ -109,8 +111,8 @@ export interface OrderItem {
 
 export interface CheckoutRequest {
   amount: number;
-  provider: 'midtrans' | 'stripe';
-  orderType: 'GENERAL' | 'PREMIUM_UPGRADE';
+  provider: typeof PAYMENT_PROVIDER[keyof typeof PAYMENT_PROVIDER];
+  orderType: typeof ORDER_TYPE[keyof typeof ORDER_TYPE];
   items?: OrderItem[];
 }
 

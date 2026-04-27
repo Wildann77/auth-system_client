@@ -31,14 +31,13 @@ export function calculatePasswordStrength(password: string): {
   let score = 0;
 
   if (password.length >= 8) score++;
-  if (password.length >= 12) score++;
-  if (/[a-z]/.test(password)) score++;
   if (/[A-Z]/.test(password)) score++;
+  if (/[a-z]/.test(password)) score++;
   if (/[0-9]/.test(password)) score++;
   if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
 
-  const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
-  const colors = ['text-red-500', 'text-red-500', 'text-yellow-500', 'text-yellow-500', 'text-green-500', 'text-green-500'];
+  const labels = ['Sangat Lemah', 'Lemah', 'Cukup', 'Baik', 'Kuat', 'Sangat Kuat'];
+  const colors = ['text-destructive', 'text-destructive', 'text-warning', 'text-warning', 'text-success', 'text-success'];
 
   return {
     score: Math.min(score, 5),

@@ -24,7 +24,7 @@ export default function PremiumPage() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const updateUser = useAuthStore((state) => state.updateUser);
-  const [provider, setProvider] = useState<'midtrans' | 'stripe'>('midtrans');
+  const [provider, setProvider] = useState<typeof PAYMENT_PROVIDER[keyof typeof PAYMENT_PROVIDER]>(PAYMENT_PROVIDER.MIDTRANS);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleUpgrade = async () => {
@@ -35,11 +35,11 @@ export default function PremiumPage() {
       const response = await paymentApi.checkout({
         amount: PREMIUM_PRICE,
         provider,
-        orderType: 'PREMIUM_UPGRADE',
+        orderType: ORDER_TYPE.PREMIUM_UPGRADE,
         items: [
           {
-            id: 'premium-monthly',
-            name: 'Premium Monthly',
+            id: FINANCIALS.PREMIUM_ITEM_ID,
+            name: FINANCIALS.PREMIUM_ITEM_NAME,
             price: PREMIUM_PRICE,
             quantity: 1,
           },
@@ -47,9 +47,9 @@ export default function PremiumPage() {
       });
 
       if (response.data) {
-        if (provider === 'midtrans' && response.data.snapUrl) {
+        if (provider === PAYMENT_PROVIDER.MIDTRANS && response.data.snapUrl) {
           window.location.href = response.data.snapUrl;
-        } else if (provider === 'stripe' && response.data.checkoutUrl) {
+        } else if (provider === PAYMENT_PROVIDER.STRIPE && response.data.checkoutUrl) {
           window.location.href = response.data.checkoutUrl;
         } else {
           toast.success('Pesanan dibuat! Mohon refresh halaman setelah payment.');
@@ -196,7 +196,7 @@ export default function PremiumPage() {
               </Button>
 
               <p className="text-xs text-muted-foreground text-center">
-                Pembayaran aman melalui {provider === 'midtrans' ? 'Midtrans' : 'Stripe'}
+                Pembayaran aman melalui {provider === PAYMENT_PROVIDER.MIDTRANS ? 'Midtrans' : 'Stripe'}
               </p>
             </CardContent>
           </Card>

@@ -14,9 +14,6 @@ export function useVerifyEmail() {
         toast.success('Email berhasil diverifikasi!');
       }
     },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Verifikasi email gagal');
-    },
   });
 }
 
@@ -30,9 +27,6 @@ export function useResendVerification() {
       if (response.success) {
         toast.success('Email verifikasi telah dikirim ulang');
       }
-    },
-    onError: () => {
-      toast.error('Terjadi kesalahan');
     },
   });
 }

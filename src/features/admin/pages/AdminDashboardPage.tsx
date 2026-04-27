@@ -71,9 +71,6 @@ export default function AdminDashboardPage() {
       queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
       toast.success('Role berhasil diperbarui');
     },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Gagal memperbarui role');
-    },
   });
 
   const deleteUserMutation = useMutation({
@@ -82,9 +79,6 @@ export default function AdminDashboardPage() {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
       queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
       toast.success('User berhasil dihapus');
-    },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Gagal menghapus user');
     },
   });
 

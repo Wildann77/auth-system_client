@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowRight, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 
 const PaymentSuccessPage: React.FC = () => {
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+
+  useEffect(() => {
+    // Refresh user session to get updated premium status from backend
+    initializeAuth();
+  }, [initializeAuth]);
+
   return (
     <div className="container max-w-2xl mx-auto py-20 px-4">
       <Card className="glass shadow-2xl border-primary/20 text-center animate-in fade-in zoom-in duration-500">
@@ -29,7 +37,7 @@ const PaymentSuccessPage: React.FC = () => {
               <ArrowRight className="h-4 w-4 text-primary" />
             </div>
             <p className="text-sm">
-              Status premium Anda sudah aktif. Anda mungkin perlu memuat ulang halaman dashboard jika status belum berubah.
+              Status premium Anda sudah aktif. Klik tombol di bawah untuk mulai menjelajah.
             </p>
           </div>
         </CardContent>

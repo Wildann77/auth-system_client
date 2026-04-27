@@ -55,6 +55,7 @@ src/shared/
 | `/settings/2fa` | ProtectedRoute | 2FA setup |
 | `/premium` | ProtectedRoute | Premium upgrade |
 | `/content` | ProtectedRoute | Exclusive content |
+| `/payment/success` | ProtectedRoute | Payment success feedback |
 | `/admin` | AdminRoute | Admin dashboard |
 
 ## Route Protection
@@ -194,5 +195,6 @@ Untuk AI Agent yang bekerja di repositori ini, harap perhatikan aturan berikut:
 12. **Tailwind v4**: Jangan gunakan `tailwind.config.js`. Semua kustomisasi tema harus dilakukan di `src/index.css` di dalam block `@theme`.
 13. **Form Validation**: Selalu gunakan Zod schema yang didefinisikan di `features/*/types/*.ts` dan integrasikan dengan React Hook Form.
 14. **Theme Colors & UI**: Hindari penggunaan warna hardcoded (seperti `bg-slate-900` atau `bg-white/5`) pada background dan card. Gunakan variabel tema Tailwind v4 (contoh: `bg-background`, `bg-card`) atau utility `.glass` yang sudah disediakan di `index.css` agar mendukung transisi Dark/Light Mode dengan sempurna.
-15. **Seamless Session Continuity**: Setiap response sukses dari update sensitif (seperti ganti password) akan berisi `accessToken` baru dari backend. Wajib perbarui `accessToken` di store menggunakan `setAccessToken` agar user tidak terkena error 401 dan tidak perlu login ulang. **Note: refreshToken dikelola via HTTP-Only cookie dan tidak akan muncul di response body.**
+15. **Seamless Session Continuity**: Setiap response sukses dari update sensitif (seperti ganti password) akan berisi `accessToken` baru dari backend. Wajib perbarui `accessToken` di store menggunakan `setAccessToken` agar user tidak terkena error 401 dan tidak perlu login ulang. Update status Premium tidak lagi memicu *logout* paksa; sistem akan melakukan verifikasi latar belakang secara otomatis.
 16. **Premium Auto-Renew UI**: Pada `DashboardPage`, UI bereaksi pada status `autoRenew`. Jika `user.isPremium` & `user.autoRenew` aktif, tampilkan tombol "Batalkan Langganan". Aksi ini akan memanggil `/payment/cancel` lalu menjalankan `initializeAuth` untuk me-refresh data tanpa reload penuh.
+17. **Payment Success Auto-Refresh**: Halaman `/payment/success` secara otomatis memicu `initializeAuth()` saat dimuat (*mount*). Ini menjamin bahwa state premium terbaru dari server langsung ditarik ke dalam aplikasi, sehingga saat pengguna pindah ke Dasbor, status premium sudah ter-sinkronisasi tanpa perlu muat ulang halaman manual.

@@ -17,9 +17,6 @@ export function useEnable2FA() {
         toast.success('2FA berhasil diaktifkan!');
       }
     },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Gagal mengaktifkan 2FA');
-    },
   });
 }
 
@@ -37,9 +34,6 @@ export function useConfirm2FA() {
         toast.success('2FA berhasil dikonfirmasi!');
       }
     },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Verifikasi 2FA gagal');
-    },
   });
 }
 
@@ -56,9 +50,6 @@ export function useDisable2FA() {
         updateUser({ twoFactorEnabled: false });
         toast.success('2FA berhasil dinonaktifkan!');
       }
-    },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Gagal menonaktifkan 2FA');
     },
   });
 }
@@ -78,9 +69,6 @@ export function useChangePassword() {
         }
         toast.success('Password berhasil diubah!');
       }
-    },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Gagal mengubah password');
     },
   });
 }

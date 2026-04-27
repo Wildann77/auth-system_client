@@ -28,9 +28,6 @@ export function useLogin() {
       }
       return response;
     },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Login gagal');
-    },
   });
 }
 
@@ -54,9 +51,6 @@ export function useRegister() {
         navigate('/login');
       }
     },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Registrasi gagal');
-    },
   });
 }
 
@@ -73,9 +67,6 @@ export function useForgotPassword() {
       if (response.success) {
         toast.success('Email reset password telah dikirim jika akun exists');
       }
-    },
-    onError: () => {
-      toast.error('Terjadi kesalahan');
     },
   });
 }
@@ -94,9 +85,6 @@ export function useResetPassword() {
         navigate('/login');
       }
     },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Reset password gagal');
-    },
   });
 }
 
@@ -112,10 +100,6 @@ export function useLogout() {
     onSuccess: () => {
       clearAuth();
       toast.success('Logout berhasil!');
-      navigate('/login');
-    },
-    onError: () => {
-      clearAuth();
       navigate('/login');
     },
   });

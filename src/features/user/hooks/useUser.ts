@@ -36,8 +36,5 @@ export function useUpdateProfile() {
         toast.success('Profil berhasil diperbarui!');
       }
     },
-    onError: (error: { response?: { data?: { message?: string } } }) => {
-      toast.error(error.response?.data?.message || 'Gagal memperbarui profil');
-    },
   });
 }

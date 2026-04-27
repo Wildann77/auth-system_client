@@ -176,6 +176,7 @@ Flat config (`eslint.config.js`). No type-aware rules.
 8. **Response Validation**: Use `result.data?.requires2FA` for consistent API response checking in auth flows
 9. **Dark Mode**: Managed in `AppLayout.tsx` by toggling `.dark` class on `document.documentElement`. Default is dark.
 10. **UI Language**: Always use **Bahasa Indonesia** for user-facing text (buttons, labels, messages).
+11. **Global Error Handling**: Errors from API calls are handled centrally in `src/shared/api/query-client.ts` via `MutationCache`. This automatically shows a toast notification for non-success responses.
 
 ## Konteks AI untuk Konsistensi
 
@@ -198,3 +199,4 @@ Untuk AI Agent yang bekerja di repositori ini, harap perhatikan aturan berikut:
 15. **Seamless Session Continuity**: Setiap response sukses dari update sensitif (seperti ganti password) akan berisi `accessToken` baru dari backend. Wajib perbarui `accessToken` di store menggunakan `setAccessToken` agar user tidak terkena error 401 dan tidak perlu login ulang. Update status Premium tidak lagi memicu *logout* paksa; sistem akan melakukan verifikasi latar belakang secara otomatis.
 16. **Premium Auto-Renew UI**: Pada `DashboardPage`, UI bereaksi pada status `autoRenew`. Jika `user.isPremium` & `user.autoRenew` aktif, tampilkan tombol "Batalkan Langganan". Aksi ini akan memanggil `/payment/cancel` lalu menjalankan `initializeAuth` untuk me-refresh data tanpa reload penuh.
 17. **Payment Success Auto-Refresh**: Halaman `/payment/success` secara otomatis memicu `initializeAuth()` saat dimuat (*mount*). Ini menjamin bahwa state premium terbaru dari server langsung ditarik ke dalam aplikasi, sehingga saat pengguna pindah ke Dasbor, status premium sudah ter-sinkronisasi tanpa perlu muat ulang halaman manual.
+18. **Global Error Handling**: Jangan menulis `toast.error` manual di dalam blok `onError` mutasi kecuali ada logika khusus. Gunakan `mutationCache` global di `query-client.ts`. Jika ingin mematikan toast global untuk aksi tertentu, tambahkan `meta: { silent: true }` pada opsi `useMutation`.

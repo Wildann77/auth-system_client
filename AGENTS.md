@@ -120,8 +120,9 @@ Content API:
 GET  /content/exclusive
 
 Payment Constants:
-Price: 99.000 IDR (PREMIUM_UPGRADE_PRICE)
+Price: 99.000 IDR / Bulan (PREMIUM_UPGRADE_PRICE)
 Currency: IDR
+Duration: 30 Hari (Monthly)
 ```
 
 ## Types
@@ -152,6 +153,7 @@ AdminStats {
 - **Fonts**: `Inter` (Sans), `Source Serif 4` (Serif), `JetBrains Mono` (Mono).
 - **Dark mode**: Native Tailwind v4 support, toggled via `.dark` class.
 - **Plugins**: `tailwindcss-animate` integrated via `@plugin`.
+- **Animations**: Menggunakan sistem animasi yang halus (*Fluid Animations*). Durasi rata-rata 0.25s - 0.3s, travel distance kecil (8px - 12px), dan wajib menggunakan `opacity: 0` pada elemen dengan delay untuk mencegah *flicker* saat dimuat.
 
 ## Build Modes
 
@@ -201,3 +203,7 @@ Untuk AI Agent yang bekerja di repositori ini, harap perhatikan aturan berikut:
 17. **Payment Success Auto-Refresh**: Halaman `/payment/success` secara otomatis memicu `initializeAuth()` saat dimuat (*mount*). Ini menjamin bahwa state premium terbaru dari server langsung ditarik ke dalam aplikasi, sehingga saat pengguna pindah ke Dasbor, status premium sudah ter-sinkronisasi tanpa perlu muat ulang halaman manual.
 18. **Global Error Handling**: Jangan menulis `toast.error` manual di dalam blok `onError` mutasi kecuali ada logika khusus. Gunakan `mutationCache` global di `query-client.ts`. Jika ingin mematikan toast global untuk aksi tertentu, tambahkan `meta: { silent: true }` pada opsi `useMutation`.
 19. **Shared Constants (CRITICAL)**: Gunakan konstanta terpusat di `src/shared/constants/` untuk Peran (`USER_ROLE`), Provider (`AUTH_PROVIDER`), dan Payment (`ORDER_TYPE`, `ORDER_STATUS`, `FINANCIALS`). Dilarang keras menggunakan string literal manual untuk logika bisnis atau identitas di seluruh aplikasi.
+20. **Premium Subscription Model**: Model bisnis premium bersifat **Bulanan (30 hari)**. Selalu gunakan teks "Bulanan" atau "Per Bulan" di UI dan hindari penyebutan "Seumur Hidup" atau "One-time" pada paket harga.
+21. **Fluid Animations Standard**: Saat menambahkan animasi baru, patuhi standar: durasi cepat (0.2s - 0.3s), travel distance kecil (max 12px), dan gunakan easing `cubic-bezier(0.22, 1, 0.36, 1)`. Pastikan elemen dengan `animation-delay` di-set `opacity: 0` secara default di CSS.
+---
+*Terakhir diperbarui: 27 April 2026 - Update Paket Premium & Standar Animasi*

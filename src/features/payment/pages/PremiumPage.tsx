@@ -158,17 +158,17 @@ export default function PremiumPage() {
                   Premium Plan
                 </CardTitle>
                 <Badge className="bg-warning/20 text-warning border-warning/30 text-xs">
-                  One-time
+                  Bulanan
                 </Badge>
               </div>
-              <CardDescription>Satu pembayaran untuk akses seumur hidup</CardDescription>
+              <CardDescription>Akses premium selama 30 hari</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-center py-2">
                 <div className="text-5xl font-bold">
                   Rp {PREMIUM_PRICE.toLocaleString('id-ID')}
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">Bayar sekali, nikmati selamanya</p>
+                <p className="text-sm text-muted-foreground mt-1">Berlaku selama 1 bulan</p>
               </div>
 
               {/* Payment Method Selector */}

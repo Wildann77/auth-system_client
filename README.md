@@ -86,5 +86,5 @@ src/
 3. **Global Error Handling:** Centrally managed via TanStack Query `MutationCache`, showing toast notifications automatically for API errors.
 4. **Reactive Redirection:** Redirects are handled reactively by state changes in `ProtectedRoute` rather than `window.location.href`.
 
---
+---
 *Last updated: April 2026*
